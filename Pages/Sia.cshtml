@@ -1,0 +1,32 @@
+﻿@page
+@model SiaModel
+@{
+    ViewData["Title"] = "View all flights with carbon offset";
+}
+
+<div class="row">
+    <div class="container">
+        @foreach (Models.FlightOffset offsetFlight in Model.Flights)
+        {
+            <div class="jumbotron">
+                <h1 class="display-4">@offsetFlight.FlightDetails.FlightNumber (@offsetFlight.FlightDetails.AircraftName)</h1>
+                <p class="lead">
+                    @(Models.Globals.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].CityName
+                    + ", " + Models.Globals.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].CountryName
+                    + " (" + Models.Globals.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].Code + ")")
+                    <i class="fa fa-long-arrow-right"></i>
+                    @(Models.Globals.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].CityName
+                    + ", " + Models.Globals.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].CountryName
+                    + " (" + Models.Globals.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].Code + ")")
+                </p>
+                <hr class="my-4">
+                <p><b>Flight Date:</b> @offsetFlight.FlightDetails.Date</p>
+                <p><b>Fuel Burn:</b> @offsetFlight.FlightDetails.FuelBurn per KG</p>
+                <p><b>Carbon Emission Offset Progress:</b></p>
+                <div class="progress" style="height: 20px;background-color: #fff;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @Math.Round((offsetFlight.FlightDetails.CurrentCarbonEmission / offsetFlight.FlightDetails.TotalCarbonEmission * 100), 0)%" aria-valuenow="@Math.Round(offsetFlight.FlightDetails.CurrentCarbonEmission, 0)" aria-valuemin="0" aria-valuemax="@Math.Round(offsetFlight.FlightDetails.TotalCarbonEmission, 0)"></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

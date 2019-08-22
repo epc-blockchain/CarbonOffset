@@ -1,0 +1,10 @@
+[{
+    "from_airport_code": "CYUL",
+    "to_airport_code": "LFPG",
+    "travelclass": "Y",
+    "hasdirect": true,
+    "distance": 5520,
+    "distance_unit": "kilometers",
+    "fuelburn_kg": 50340.5,
+    "co2_kg": 314.5
+}]

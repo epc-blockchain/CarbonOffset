@@ -1,0 +1,118 @@
+﻿@page
+@model CarbonModel
+@{
+    ViewData["Title"] = "Offset Carbon Emissions";
+}
+
+<h1 align="center">Summary of Fare Conditions</h1>
+
+<div class="calc_details">
+    <table class="calc_table" align="center">
+        <thead>
+            <tr>
+                <th bgcolor="DDDDDD">Fare Conditions</th>
+                <th bgcolor="#12533F">
+                    <strong style="color:#FFFFFF">
+                        @(Models.Globals.Airports[Model.OriginAirport].CityName
+                        + " (" + Models.Globals.Airports[Model.OriginAirport].CountryCode + ") "
+                        + Models.Globals.Airports[Model.OriginAirport].Code)
+                        <i class="fa fa-long-arrow-right"></i>
+                        @(Models.Globals.Airports[Model.DestinationAirport].CityName
+                        + " (" + Models.Globals.Airports[Model.DestinationAirport].CountryCode + ") "
+                        + Models.Globals.Airports[Model.DestinationAirport].Code)
+                    </strong>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Seat Selection at Booking</strong></td>
+                <td>From SGD 6.00</td>
+            </tr>
+            <tr>
+                <td><strong>Earn KrisFlyer miles</strong></td>
+                <td>50%</td>
+            </tr>
+            <tr>
+                <td><strong>Upgrade with miles</strong></td>
+                <td>Not Allowed</td>
+            </tr>
+            <tr>
+                <td><strong>Cancellation</strong></td>
+                <td>Not Allowed</td>
+            </tr>
+            <tr>
+                <td><strong>Booking Charge</strong></td>
+                <td>SGD 68.70</td>
+            </tr>
+            <tr>
+                <td><strong>Trip</strong></td>
+                @if (String.IsNullOrEmpty(Model.ReturnFlightNumber))
+                {
+                    <td>One Way</td>
+                }
+                else
+                {
+                    <td>Round Trip</td>
+                }
+            </tr>
+            <tr>
+                <td><strong>Class</strong></td>
+                <td>@Enum.GetName(typeof(Models.FlightClassType), Model.ClassType)</td>
+            </tr>
+            <tr>
+                <td><strong>Distance</strong></td>
+                <td>@Math.Round((double)ViewData["Distance"], 2) km</td>
+            </tr>
+            <tr>
+                <td bgcolor="DDDDDD">Carbon Offset</td>
+                <td bgcolor="#12533F">
+                    <strong style="color:#FFFFFF">@Model.Passengers Passengers</strong>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>CO2 amount</strong></td>
+                <td>@Math.Round((double)ViewData["CurrentCarbonEmission"], 2) kg of CO2</td>
+            </tr>
+            <tr>
+                <td><strong>Flight CO2 amount</strong></td>
+                <td>@Math.Round((double)ViewData["TotalCarbonEmission"], 2) kg of CO2</td>
+            </tr>
+            <tr>
+                <td><strong>Flight Fuel Burn</strong></td>
+                <td>@Math.Round((double)ViewData["FuelBurn"], 2) per KG</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h2 class="mt-4">Purchase <code>@(Math.Round((double)ViewData["CurrentCarbonEmission"], 2) / 1000)</code> carbon credits to offset the above carbon emission:</h2>
+<hr />
+<form method="post">
+    <div class="row">
+        <input name="departureFlightDetailsJson" type="hidden" value="@ViewData["departureFlightDetailsJson"]" />
+        @if (ViewData.ContainsKey("returnFlightDetailsJson"))
+        {
+            <input name="returnFlightDetailsJson" type="hidden" value="@ViewData["returnFlightDetailsJson"]" />
+        }
+        @foreach (Models.CarbonProjectDetails carbonProject in Model.CarbonProjects)
+        {
+            <div class="col d-flex align-items-stretch">
+                <div class="card">
+                    <img src="~/images/@(carbonProject.Id).jpg" class="card-img-top align-items-stretch" alt="Image of @carbonProject.Name" style="height: 12rem;">
+                    <div class="card-header text-center">
+                        <h6>@Math.Round((double)carbonProject.CarbonPrice, 2) @carbonProject.Currency Per Credit</h6>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">@carbonProject.Name</h4>
+                        <br />
+                        <div class="card-text">@carbonProject.Description</div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <div class="float-left" style="width: 8rem;">@carbonProject.Available Credits Available</div>
+                        <button name="submit" type="submit" class="btn btn-primary float-right" value="@Newtonsoft.Json.JsonConvert.SerializeObject(carbonProject, Newtonsoft.Json.Formatting.None)">Buy</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</form>

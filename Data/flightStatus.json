@@ -1,0 +1,338 @@
+{
+  "status": "SUCCESS",
+  "code": "200",
+  "message": "SUCCESS",
+  "clientUUID": "SAA",
+  "response": {
+    "origin": {
+      "airportCode": "SIN",
+      "airportName": "Changi Intl",
+      "cityCode": "SIN",
+      "cityName": "Singapore"
+    },
+    "destination": {
+      "airportCode": "HKG",
+      "airportName": "Hong Kong",
+      "airportTerminal": "1",
+      "cityCode": "HKG",
+      "cityName": "Hong Kong"
+    },
+    "numberOfFlights": 7,
+    "flights": [
+      {
+        "origin": {
+          "airportCode": "SIN",
+          "airportName": "Changi Intl",
+          "cityCode": "SIN",
+          "cityName": "Singapore"
+        },
+        "destination": {
+          "airportCode": "HKG",
+          "airportName": "Hong Kong",
+          "airportTerminal": "1",
+          "cityCode": "HKG",
+          "cityName": "Hong Kong"
+        },
+        "numberOfStops": 0,
+        "legs": [
+          {
+            "flightNumber": "0890",
+            "operatingAirlineCode": "SQ",
+            "operatingAirlineName": "Singapore Airlines",
+            "marketingAirlineCode": "SQ",
+            "marketingAirlineName": "Singapore Airlines",
+            "isFlightRenumbered": false,
+            "isFlightRerouted": false,
+            "flightStatus": "On schedule",
+            "origin": {
+              "airportCode": "SIN",
+              "airportName": "Changi Intl",
+              "cityCode": "SIN",
+              "cityName": "Singapore"
+            },
+            "destination": {
+              "airportCode": "HKG",
+              "airportName": "Hong Kong",
+              "airportTerminal": "1",
+              "cityCode": "HKG",
+              "cityName": "Hong Kong"
+            },
+            "scheduledDepartureTime": "2018-04-21T07:30",
+            "scheduledArrivalTime": "2018-04-21T11:20",
+            "aircraftType": "772R",
+            "provisionalEtd": false
+          }
+        ]
+      },
+      {
+        "origin": {
+          "airportCode": "SIN",
+          "airportName": "Changi Intl",
+          "cityCode": "SIN",
+          "cityName": "Singapore"
+        },
+        "destination": {
+          "airportCode": "HKG",
+          "airportName": "Hong Kong",
+          "airportTerminal": "1",
+          "cityCode": "HKG",
+          "cityName": "Hong Kong"
+        },
+        "numberOfStops": 0,
+        "legs": [
+          {
+            "flightNumber": "0860",
+            "operatingAirlineCode": "SQ",
+            "operatingAirlineName": "Singapore Airlines",
+            "marketingAirlineCode": "SQ",
+            "marketingAirlineName": "Singapore Airlines",
+            "isFlightRenumbered": false,
+            "isFlightRerouted": false,
+            "flightStatus": "On schedule",
+            "origin": {
+              "airportCode": "SIN",
+              "airportName": "Changi Intl",
+              "cityCode": "SIN",
+              "cityName": "Singapore"
+            },
+            "destination": {
+              "airportCode": "HKG",
+              "airportName": "Hong Kong",
+              "airportTerminal": "1",
+              "cityName": "Hong Kong"
+            },
+            "scheduledDepartureTime": "2018-04-21T08:40",
+            "scheduledArrivalTime": "2018-04-21T12:40",
+            "aircraftType": "359",
+            "provisionalEtd": false
+          }
+        ]
+      },
+      {
+        "origin": {
+          "airportCode": "SIN",
+          "airportName": "Changi Intl",
+          "cityCode": "SIN",
+          "cityName": "Singapore"
+        },
+        "destination": {
+          "airportCode": "HKG",
+          "airportName": "Hong Kong",
+          "airportTerminal": "1",
+          "cityCode": "HKG",
+          "cityName": "Hong Kong"
+        },
+        "numberOfStops": 0,
+        "legs": [
+          {
+            "flightNumber": "0856",
+            "operatingAirlineCode": "SQ",
+            "operatingAirlineName": "Singapore Airlines",
+            "marketingAirlineCode": "SQ",
+            "marketingAirlineName": "Singapore Airlines",
+            "isFlightRenumbered": false,
+            "isFlightRerouted": false,
+            "flightStatus": "On schedule",
+            "origin": {
+              "airportCode": "SIN",
+              "airportName": "Changi Intl",
+              "cityCode": "SIN",
+              "cityName": "Singapore"
+            },
+            "destination": {
+              "airportCode": "HKG",
+              "airportName": "Hong Kong",
+              "airportTerminal": "1",
+              "cityCode": "HKG",
+              "cityName": "Hong Kong"
+            },
+            "scheduledDepartureTime": "2018-04-21T09:55",
+            "scheduledArrivalTime": "2018-04-21T13:55",
+            "aircraftType": "388S",
+            "provisionalEtd": false
+          }
+        ]
+      },
+      {
+        "origin": {
+          "airportCode": "SIN",
+          "airportName": "Changi Intl",
+          "cityCode": "SIN",
+          "cityName": "Singapore"
+        },
+        "destination": {
+          "airportCode": "HKG",
+          "airportName": "Hong Kong",
+          "airportTerminal": "1",
+          "cityCode": "HKG",
+          "cityName": "Hong Kong"
+        },
+        "numberOfStops": 0,
+        "legs": [
+          {
+            "flightNumber": "0866",
+            "operatingAirlineCode": "SQ",
+            "operatingAirlineName": "Singapore Airlines",
+            "marketingAirlineCode": "SQ",
+            "marketingAirlineName": "Singapore Airlines",
+            "isFlightRenumbered": false,
+            "isFlightRerouted": false,
+            "flightStatus": "On schedule",
+            "origin": {
+              "airportCode": "SIN",
+              "airportName": "Changi Intl",
+              "cityCode": "SIN",
+              "cityName": "Singapore"
+            },
+            "destination": {
+              "airportCode": "HKG",
+              "airportName": "Hong Kong",
+              "airportTerminal": "1",
+              "cityCode": "HKG",
+              "cityName": "Hong Kong"
+            },
+            "scheduledDepartureTime": "2018-04-21T13:05",
+            "scheduledArrivalTime": "2018-04-21T17:05",
+            "aircraftType": "77WN",
+            "provisionalEtd": false
+          }
+        ]
+      },
+      {
+        "origin": {
+          "airportCode": "SIN",
+          "airportName": "Changi Intl",
+          "cityCode": "SIN",
+          "cityName": "Singapore"
+        },
+        "destination": {
+          "airportCode": "HKG",
+          "airportName": "Hong Kong",
+          "airportTerminal": "1",
+          "cityCode": "HKG",
+          "cityName": "Hong Kong"
+        },
+        "numberOfStops": 0,
+        "legs": [
+          {
+            "flightNumber": "0872",
+            "operatingAirlineCode": "SQ",
+            "operatingAirlineName": "Singapore Airlines",
+            "marketingAirlineCode": "SQ",
+            "marketingAirlineName": "Singapore Airlines",
+            "isFlightRenumbered": false,
+            "isFlightRerouted": false,
+            "flightStatus": "On schedule",
+            "origin": {
+              "airportCode": "SIN",
+              "airportName": "Changi Intl",
+              "cityCode": "SIN",
+              "cityName": "Singapore"
+            },
+            "destination": {
+              "airportCode": "HKG",
+              "airportName": "Hong Kong",
+              "airportTerminal": "1",
+              "cityCode": "HKG",
+              "cityName": "Hong Kong"
+            },
+            "scheduledDepartureTime": "2018-04-21T15:05",
+            "scheduledArrivalTime": "2018-04-21T18:50",
+            "aircraftType": "772R",
+            "provisionalEtd": false
+          }
+        ]
+      },
+      {
+        "origin": {
+          "airportCode": "SIN",
+          "airportName": "Changi Intl",
+          "cityCode": "SIN",
+          "cityName": "Singapore"
+        },
+        "destination": {
+          "airportCode": "SFO",
+          "airportName": "San Francisco Intl",
+          "airportTerminal": "I",
+          "cityCode": "SFO",
+          "cityName": "San Francisco"
+        },
+        "numberOfStops": 0,
+        "legs": [
+          {
+            "flightNumber": "0002",
+            "operatingAirlineCode": "SQ",
+            "operatingAirlineName": "Singapore Airlines",
+            "marketingAirlineCode": "SQ",
+            "marketingAirlineName": "Singapore Airlines",
+            "isFlightRenumbered": false,
+            "isFlightRerouted": false,
+            "flightStatus": "On schedule",
+            "origin": {
+              "airportCode": "SIN",
+              "airportName": "Changi Intl",
+              "cityCode": "SIN",
+              "cityName": "Singapore"
+            },
+            "destination": {
+              "airportCode": "HKG",
+              "airportName": "Hong Kong",
+              "airportTerminal": "1",
+              "cityCode": "HKG",
+              "cityName": "Hong Kong"
+            },
+            "scheduledDepartureTime": "2018-04-21T18:30",
+            "scheduledArrivalTime": "2018-04-21T22:15",
+            "aircraftType": "77WN",
+            "provisionalEtd": false
+          }
+        ]
+      },
+      {
+        "origin": {
+          "airportCode": "SIN",
+          "airportName": "Changi Intl",
+          "cityCode": "SIN",
+          "cityName": "Singapore"
+        },
+        "destination": {
+          "airportCode": "HKG",
+          "airportName": "Hong Kong",
+          "airportTerminal": "1",
+          "cityCode": "HKG",
+          "cityName": "Hong Kong"
+        },
+        "numberOfStops": 0,
+        "legs": [
+          {
+            "flightNumber": "0868",
+            "operatingAirlineCode": "SQ",
+            "operatingAirlineName": "Singapore Airlines",
+            "marketingAirlineCode": "SQ",
+            "marketingAirlineName": "Singapore Airlines",
+            "isFlightRenumbered": false,
+            "isFlightRerouted": false,
+            "flightStatus": "On schedule",
+            "origin": {
+              "airportCode": "SIN",
+              "airportName": "Changi Intl",
+              "cityCode": "SIN",
+              "cityName": "Singapore"
+            },
+            "destination": {
+              "airportCode": "HKG",
+              "airportName": "Hong Kong",
+              "airportTerminal": "1",
+              "cityCode": "HKG",
+              "cityName": "Hong Kong"
+            },
+            "scheduledDepartureTime": "2018-04-21T19:55",
+            "scheduledArrivalTime": "2018-04-21T23:50",
+            "aircraftType": "772R",
+            "provisionalEtd": false
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,141 @@
+﻿@page
+@model ThankYouModel
+@{
+    ViewData["Title"] = "Thank you for contributing to our efforts of going green!";
+}
+
+<div class="receipt">
+    <img src="~/images/siaban.png" alt="receipttop" style="width:100%;" />
+    <h2 style="font-weight:bold">
+        Electronic Ticket Receipt: 2JFN0
+    </h2>
+    <br />
+    <h2 style="font-weight:bold">
+        John Doe
+    </h2>
+    <div class="row">
+        <div class="col-lg-5">
+            <h4>Booking Reference:</h4>
+            <p>REF</p>
+        </div>
+        <div class="col-lg-5">
+            <h4>Date of issue:</h4>
+            <p>@DateTime.Today.ToString("yyyy-MM-dd")</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5">
+            <h4>Frequent Flyer Number:</h4>
+            <p>Fly</p>
+        </div>
+        <div class="col-lg-5">
+            <h4>Place of issue:</h4>
+            <p>Singapore</p>
+        </div>
+    </div>
+
+    <br />
+    <h1 style="color: darkblue">
+        Flight Details
+    </h1>
+    <div class="row">
+        <h4>Ticket Number: 12301Y8F</h4>
+        <hr style="color:darkblue;border-width: 2px;" />
+
+    </div>
+    <div class="row">
+        <div class="col-10">
+            <h4 style="font-weight:bold">
+                @(Models.Globals.Airports[Model.DepartureFlightOffset.FlightDetails.IataOriginAirportCode].CityName
+                    + " (" + Models.Globals.Airports[Model.DepartureFlightOffset.FlightDetails.IataOriginAirportCode].CountryCode + ") "
+                    + Models.Globals.Airports[Model.DepartureFlightOffset.FlightDetails.IataOriginAirportCode].Code) ->
+                        @(Models.Globals.Airports[Model.DepartureFlightOffset.FlightDetails.IataDestinationAirportCode].CityName
+                        + " (" + Models.Globals.Airports[Model.DepartureFlightOffset.FlightDetails.IataDestinationAirportCode].CountryCode + ") "
+                        + Models.Globals.Airports[Model.DepartureFlightOffset.FlightDetails.IataDestinationAirportCode].Code)
+                    </h4>
+        </div>
+        <div class="col-2">
+            <h4>@Enum.GetName(typeof(Models.FlightClassType), Model.DepartureFlightOffset.FlightDetails.ClassType)</h4>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-lg-5">
+            <h4>Depart: </h4>
+            <p>@Model.DepartureFlightOffset.FlightDetails.Date.ToString("yyyy-MM-dd HH:MM")</p>
+        </div>
+        <div class="col-lg-5">
+            <h4>Flight Number: </h4>
+            <p>@Model.DepartureFlightOffset.FlightDetails.FlightNumber</p>
+        </div>
+    </div>
+    <div class="row">
+        @if (!String.IsNullOrEmpty(Model.ReturnFlightOffsetId))
+{
+            <div class="col-lg-5">
+                <h4>Return: </h4>
+                <p>@Model.ReturnFlightOffset.FlightDetails.Date.ToString("yyyy-MM-dd HH:MM")</p>
+            </div>
+            <div class="col-lg-5">
+                <h4>Flight Number: </h4>
+                <p>@Model.ReturnFlightOffset.FlightDetails.FlightNumber</p>
+            </div>
+
+}
+    </div>
+    <hr />
+    <h1 style="color: darkblue">
+        Payment Details
+    </h1>
+    <hr style="color:darkblue;border-width: 2px;" />
+
+    <div class="row">
+        <div class="col-lg-4">
+            <h4>Carbon Offset Required: </h4>
+        </div>
+        <div class="col-lg-4">
+            <p>@ViewData["CarbonOffset"] kg of CO2<br />
+            (Equivalent to <code>@Math.Round((double)ViewData["CarbonOffset"], 2) / 1000)</code> Carbon Credit)</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h4>Project Carbon Credit Price: </h4>
+        </div>
+        <div class="col-lg-4">
+            <p>@Model.CarbonProjectDetails.CarbonPrice SGD</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h4>Total Carbon Price: </h4>
+        </div>
+        <div class="col-lg-4">
+            <p>@ViewData["CarbonPrice"] SGD</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h4>Trip: </h4>
+        </div>
+        <div class="col-lg-4">
+            <p>68.70 SGD</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h4>Tax: </h4>
+        </div>
+        <div class="col-lg-4">
+            <p>@(Math.Round((((double)@ViewData["CarbonPrice"] + 68.70) * 0.06), 2)) SGD</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h4>Total: </h4>
+        </div>
+        <div class="col-lg-4">
+            <p>@(Math.Round((((double)@ViewData["CarbonPrice"] + 68.70) * 1.06), 2)) SGD</p>
+        </div>
+    </div>
+</div>

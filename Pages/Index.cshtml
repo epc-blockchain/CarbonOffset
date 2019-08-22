@@ -1,0 +1,73 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Booking Page";
+}
+
+<div class="text-center">
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/images/fleet-banner.jpg" alt="Booking Page Banner" class="d-block w-100" />
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Singapore Airlines AppChallenge 2019</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="booking-flow">
+    <div class="Title">
+        <h2>Hi, where would you like to go?</h2>
+    </div>
+    <hr />
+    <div class="booking-form-box">
+        <div class="booking-form">
+            <form method="POST" autocomplete="off">
+                <div class="form-group row" style="height: 40px;">
+                    <div class="col">
+                        <div class="input-group">
+                            @Html.DropDownListFor(m => m.OriginAirport, Models.Globals.GetAirportList(true), new { @class = "form-control custom-select" })
+                            <div class="input-group-append">
+                                <label class="input-group-text"><i class="fa fa-map-marker"></i></label>
+                            </div>
+                            @Html.DropDownListFor(m => m.DestinationAirport, Models.Globals.GetAirportList(false), new { @class = "form-control custom-select" })
+                            <div class="input-group-append">
+                                <label class="input-group-text"><i class="fa fa-map-marker"></i></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group ">
+                            @Html.TextBoxFor(m => m.DepartureDate, Model.DepartureDate.ToString("yyyy-MM-dd"), new { @type = "date", @class = "form-control", @min = @DateTime.Today.ToString("yyyy-MM-dd") })
+                            <div class="input-group-append">
+                                <label class="input-group-text"><i class="fa fa-calendar"></i></label>
+                            </div>
+                            @Html.TextBoxFor(m => m.ReturnDate, "{0:yyyy MM dd}", new { @type = "date", @class = "form-control", @min = @DateTime.Today.AddDays(1).ToString("yyyy-MM-dd") })
+                            <div class="input-group-append">
+                                <label class="input-group-text"><i class="fa fa-calendar"></i></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ClassType" class="col col-form-label">Class</label>
+                    <div class="col">
+                        @Html.DropDownListFor(m => m.ClassType, new SelectList(Enum.GetValues(typeof(Models.FlightClassType))), new { @class = "form-control dropdown show" })
+                    </div>
+                    <label for="Passengers" class="col col-form-label">Passengers</label>
+                    <div class="col">
+                        @Html.TextBoxFor(m => m.Passengers, new { @type = "number", @class = "form-control", @min = 1, @max = 10 })
+                    </div>
+                    <div class="col text-right">
+                        <button type="submit" class="btn btn-primary js-open-loading">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@if (ModelState.ContainsKey("ErrorSearch"))
+{
+    <div class="alert alert-danger" role="alert">@ModelState["ErrorSearch"].Errors[0].ErrorMessage</div>
+}

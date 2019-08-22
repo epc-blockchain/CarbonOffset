@@ -1,0 +1,36 @@
+{
+  "projects": [
+    {
+      "id": "2cbbaef6-f39e-4a9f-b7e1-ea7886450809",
+      "name": " Solar panels in SIA's Head Office Project",
+      "description": "Project to install solar panels in SIA's Head Office, SIA embarked to harvest solar energy to support the use of green energy to meet our buildings' energy needs.",
+      "carbonPrice": "2.00",
+      "currency": "SGD",
+      "available": "1275"
+    },
+    {
+      "id": "3672f74b-6e1b-458b-885d-4e4fd7119c8d",
+      "name": "Klang Valley Residents Solar Project",
+      "description": "Project to get residents within Klang Valley (Malaysia) to install solar panels in their houses, to join the fight against Climate Change.",
+      "carbonPrice": "4.00",
+      "currency": "MYR",
+      "available": "1843"
+    },
+    {
+      "id": "1c963826-a4ad-40b3-9a83-d6816790390b",
+      "name": "SIA's buildings Energy Efficient Programme",
+      "description": "Project to ongoing replacement of Fan Coil Units (FCUs) within the buildings with more efficient models.",
+      "carbonPrice": "3.50",
+      "currency": "SGD",
+      "available": "1983"
+    },
+    {
+      "id": "b702fdc1-8fcc-44f5-b0d8-920b0e06bf66",
+      "name": "Carbon Neutral Electricity in Singapore for Sustainability",
+      "description": "iSwitch supports sustainability with carbon neutral electricity in Singapore. Carbon offset credits apply for all residential plans at no additional cost!",
+      "carbonPrice": "0.5",
+      "currency": "SGD",
+      "available": "1092"
+    }
+  ]
+}
