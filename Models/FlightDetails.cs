@@ -48,8 +48,10 @@ namespace CarbonOffset.Models
             }
             else
             {
-                string json = JsonConvert.SerializeObject((FlightDetails)obj, Formatting.Indented);
-                return (json == JsonConvert.SerializeObject(this, Formatting.Indented));
+                return (obj is FlightDetails) && ((FlightDetails)obj).FlightNumber == FlightNumber && ((FlightDetails)obj).AircraftName == AircraftName
+                     && ((FlightDetails)obj).IataOriginAirportCode == IataOriginAirportCode && ((FlightDetails)obj).IataDestinationAirportCode == IataDestinationAirportCode
+                     && ((FlightDetails)obj).IcaoOriginAirportCode == IcaoOriginAirportCode && ((FlightDetails)obj).IcaoDestinationAirportCode == IcaoDestinationAirportCode
+                     && Date.Equals(((FlightDetails)obj).Date) && ((FlightDetails)obj).ClassType == ClassType;
             }
         }
     }

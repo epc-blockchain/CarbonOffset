@@ -26,7 +26,7 @@ namespace CarbonOffset.Services
             _flightOffsets.Find<FlightOffset>(flightOffset => flightOffset.Id == id).FirstOrDefault();
 
         public FlightOffset Get(FlightDetails flightDetails) =>
-            _flightOffsets.Find<FlightOffset>(flightOffset => flightOffset.FlightDetails == flightDetails).FirstOrDefault();
+            _flightOffsets.Find<FlightOffset>(flightOffset => flightOffset.FlightDetails.Equals(flightDetails)).FirstOrDefault();
 
         public FlightOffset Create(FlightOffset flightOffset)
         {
@@ -51,6 +51,6 @@ namespace CarbonOffset.Services
             _flightOffsets.DeleteOne(flightOffset => flightOffset.Id == id);
 
         public void Remove(FlightDetails flightDetailsIn) =>
-            _flightOffsets.DeleteOne(carbonOffset => carbonOffset.FlightDetails == flightDetailsIn);
+            _flightOffsets.DeleteOne(carbonOffset => carbonOffset.FlightDetails.Equals(flightDetailsIn));
     }
 }
