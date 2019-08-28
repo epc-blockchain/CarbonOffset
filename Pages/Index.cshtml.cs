@@ -39,9 +39,9 @@ namespace CarbonOffset.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             List<Airport> airports = await _siaDestinationApiService.GetOriginAirports(OriginAirport);
-            OriginAirports = new List<SelectListItem>(airports.Select(airport => new SelectListItem(airport.CityName + " ," + airport.CountryName + " (" + airport.Name + ")", airport.Code)));
+            OriginAirports = new List<SelectListItem>(airports.Select(airport => new SelectListItem(airport.CityName + ", " + airport.CountryName + " (" + airport.Name + ")", airport.Code)));
             airports = await _siaDestinationApiService.GetDestinationAirports(OriginAirport, DestinationAirport);
-            DestinationAirports = new List<SelectListItem>(airports.Select(airport => new SelectListItem(airport.CityName + " ," + airport.CountryName + " (" + airport.Name + ")", airport.Code)));
+            DestinationAirports = new List<SelectListItem>(airports.Select(airport => new SelectListItem(airport.CityName + ", " + airport.CountryName + " (" + airport.Name + ")", airport.Code)));
             return Page();
         }
 

@@ -33,7 +33,7 @@ namespace CarbonOffset.Pages
 
             if (String.IsNullOrEmpty(Id))
             {
-                Flights = _carbonFlightOffsetService.Get();
+                Flights = _carbonFlightOffsetService.GetAll();
             }
             else
             {

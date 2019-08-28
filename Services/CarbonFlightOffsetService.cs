@@ -2,24 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using CarbonOffset.Models;
 
 namespace CarbonOffset.Services
 {
-    public class CarbonFlightOffsetService
+    public interface ICarbonFlightOffsetService
+    {
+        FlightOffset Create(FlightOffset flightOffset);
+        List<FlightOffset> GetAll();
+        FlightOffset Get(string id);
+        FlightOffset Get(FlightDetails flightDetails);
+        void Update(string id, FlightOffset carbonOffsetIn);
+        void Remove(FlightOffset flightOffsetIn);
+        void Remove(string id);
+        void Remove(FlightDetails flightDetailsIn);
+    }
+
+    public class CarbonFlightOffsetService : ICarbonFlightOffsetService
     {
         private readonly IMongoCollection<FlightOffset> _flightOffsets;
 
-        public CarbonFlightOffsetService(ICarbonOffsetDatabaseSettings settings)
+        public CarbonFlightOffsetService(IOptions<CarbonOffsetDatabaseSettings> settings)
         {
-            var client = new MongoClient(settings.ServerName);
-            var database = client.GetDatabase(settings.DatabaseName);
-
-            _flightOffsets = database.GetCollection<FlightOffset>(settings.FlightCollectionName);
+            _flightOffsets = new MongoClient(settings.Value.ServerName).GetDatabase(settings.Value.DatabaseName).GetCollection<FlightOffset>(settings.Value.FlightCollectionName);
         }
 
-        public List<FlightOffset> Get() =>
+        public List<FlightOffset> GetAll() =>
             _flightOffsets.Find(carbonOffset => true).ToList();
 
         public FlightOffset Get(string id) =>

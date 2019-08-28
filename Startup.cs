@@ -33,18 +33,18 @@ namespace CarbonOffset
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<CarbonOffsetDatabaseSettings>(Configuration.GetSection(nameof(CarbonOffsetDatabaseSettings)));
-            services.AddSingleton<ICarbonOffsetDatabaseSettings>(s => s.GetRequiredService<IOptions<CarbonOffsetDatabaseSettings>>().Value);
-            services.AddSingleton<CarbonFlightOffsetService>();
+            services.AddMemoryCache();
 
             services.AddHttpClient<IcaoCarbonEmissionApiService>();
             services.AddHttpClient<SiaFlightSearchApiService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddMemoryCache();
+            services.AddSingleton<ICommonService, CommonService>().AddHttpClient<ICommonService, CommonService>();
+            services.AddSingleton<ISiaDestinationApiService, SiaDestinationApiService>().AddHttpClient<ISiaDestinationApiService, SiaDestinationApiService>();
 
-            services.AddTransient<ICommonService, CommonService>().AddHttpClient<ICommonService, CommonService>();
-            services.AddTransient<ISiaDestinationApiService, SiaDestinationApiService>().AddHttpClient<ISiaDestinationApiService, SiaDestinationApiService>();
+            services.Configure<CarbonOffsetDatabaseSettings>(Configuration.GetSection(nameof(CarbonOffsetDatabaseSettings)));
+            services.AddSingleton<CarbonFlightOffsetService>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
