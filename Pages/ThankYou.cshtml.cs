@@ -13,6 +13,7 @@ namespace CarbonOffset.Pages
     
     public class ThankYouModel : PageModel
     {
+        private readonly ISiaDestinationApiService _siaDestinationApiService;
         private readonly CarbonFlightOffsetService _carbonFlightOffsetService;
 
         [BindProperty(SupportsGet = true)]
@@ -23,36 +24,32 @@ namespace CarbonOffset.Pages
         public FlightOffset DepartureFlightOffset { get; set; }
         public FlightOffset ReturnFlightOffset { get; set; }
         public CarbonProjectDetails CarbonProjectDetails { get; set; }
+        public Dictionary<string, Airport> Airports { get; private set; }
 
-        public ThankYouModel(CarbonFlightOffsetService carbonFlightOffsetService)
+        public ThankYouModel(ISiaDestinationApiService siaDestinationApiService, CarbonFlightOffsetService carbonFlightOffsetService)
         {
-            if (carbonFlightOffsetService != null)
-            {
-                _carbonFlightOffsetService = carbonFlightOffsetService;
-            }
-            if (Globals.Airports.Count == 0)
-            {
-                Globals.LoadAirports("./Data/airports.json");
-            }
+            _siaDestinationApiService = siaDestinationApiService;
+            _carbonFlightOffsetService = carbonFlightOffsetService;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             if (String.IsNullOrEmpty(DepartureFlightOffsetId))
             {
                 return RedirectToPage("/Index");
             }
 
+            Airports = await _siaDestinationApiService.GetAirports();
             DepartureFlightOffset = _carbonFlightOffsetService.Get(DepartureFlightOffsetId);
             CarbonProjectDetails = DepartureFlightOffset.CarbonProjects.LastOrDefault<CarbonProjectDetails>();
-            ViewData["CarbonOffset"] = Math.Round(DepartureFlightOffset.FlightDetails.CurrentCarbonEmission, 2);
-            ViewData["CarbonPrice"] = Math.Round(DepartureFlightOffset.FlightDetails.CurrentCarbonEmission / 1000 * CarbonProjectDetails.CarbonPrice, 2);
+            ViewData["CarbonOffset"] = DepartureFlightOffset.FlightDetails.CurrentCarbonEmission;
+            ViewData["CarbonPrice"] = DepartureFlightOffset.FlightDetails.CurrentCarbonEmission / 1000 * CarbonProjectDetails.CarbonPrice;
 
             if (!String.IsNullOrEmpty(ReturnFlightOffsetId))
             {
                 ReturnFlightOffset = _carbonFlightOffsetService.Get(ReturnFlightOffsetId);
-                ViewData["CarbonOffset"] = Math.Round((DepartureFlightOffset.FlightDetails.CurrentCarbonEmission + ReturnFlightOffset.FlightDetails.CurrentCarbonEmission), 2);
-                ViewData["CarbonPrice"] = Math.Round((DepartureFlightOffset.FlightDetails.CurrentCarbonEmission + ReturnFlightOffset.FlightDetails.CurrentCarbonEmission) / 1000 * CarbonProjectDetails.CarbonPrice, 2);
+                ViewData["CarbonOffset"] = DepartureFlightOffset.FlightDetails.CurrentCarbonEmission + ReturnFlightOffset.FlightDetails.CurrentCarbonEmission;
+                ViewData["CarbonPrice"] = (DepartureFlightOffset.FlightDetails.CurrentCarbonEmission + ReturnFlightOffset.FlightDetails.CurrentCarbonEmission) / 1000 * CarbonProjectDetails.CarbonPrice;
 
             }
             

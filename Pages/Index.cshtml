@@ -27,11 +27,11 @@
                 <div class="form-group row" style="height: 40px;">
                     <div class="col">
                         <div class="input-group">
-                            @Html.DropDownListFor(m => m.OriginAirport, Models.Globals.GetAirportList(true), new { @class = "form-control custom-select" })
+                            @Html.DropDownListFor(m => m.OriginAirport, Model.OriginAirports, new { @class = "form-control custom-select" })
                             <div class="input-group-append">
                                 <label class="input-group-text"><i class="fa fa-map-marker"></i></label>
                             </div>
-                            @Html.DropDownListFor(m => m.DestinationAirport, Models.Globals.GetAirportList(false), new { @class = "form-control custom-select" })
+                            @Html.DropDownListFor(m => m.DestinationAirport, Model.DestinationAirports, new { @class = "form-control custom-select" })
                             <div class="input-group-append">
                                 <label class="input-group-text"><i class="fa fa-map-marker"></i></label>
                             </div>

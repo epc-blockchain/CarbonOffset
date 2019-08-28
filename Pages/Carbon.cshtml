@@ -13,13 +13,13 @@
                 <th bgcolor="DDDDDD">Fare Conditions</th>
                 <th bgcolor="#12533F">
                     <strong style="color:#FFFFFF">
-                        @(Models.Globals.Airports[Model.OriginAirport].CityName
-                        + " (" + Models.Globals.Airports[Model.OriginAirport].CountryCode + ") "
-                        + Models.Globals.Airports[Model.OriginAirport].Code)
+                        @(Model.Airports[Model.OriginAirport].CityName
+                        + " (" + Model.Airports[Model.OriginAirport].CountryCode + ") "
+                        + Model.Airports[Model.OriginAirport].Code)
                         <i class="fa fa-long-arrow-right"></i>
-                        @(Models.Globals.Airports[Model.DestinationAirport].CityName
-                        + " (" + Models.Globals.Airports[Model.DestinationAirport].CountryCode + ") "
-                        + Models.Globals.Airports[Model.DestinationAirport].Code)
+                        @(Model.Airports[Model.DestinationAirport].CityName
+                        + " (" + Model.Airports[Model.DestinationAirport].CountryCode + ") "
+                        + Model.Airports[Model.DestinationAirport].Code)
                     </strong>
                 </th>
             </tr>

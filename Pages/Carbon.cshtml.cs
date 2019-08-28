@@ -15,17 +15,18 @@ using CarbonOffset.Services;
 
 namespace CarbonOffset.Pages
 {
-    [BindProperties(SupportsGet=true)]
+    [BindProperties(SupportsGet = true)]
     public class CarbonModel : PageModel
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly ICommonService _commonService;
+        private readonly IcaoCarbonEmissionApiService _icaoCarbonEmissionApiService;
+        private readonly ISiaDestinationApiService _siaDestinationApiService;
         private readonly CarbonFlightOffsetService _carbonFlightOffsetService;
 
-        // Api Key for ICAO Data API
-        private readonly string _icaoApiKey = "758ccce0-b9e2-11e9-a385-7b7ddcc61eff"; //aa718320-b6c1-11e9-bd0e-1bc044c2888a;
         private FlightDetails _departureFlight;
         private FlightDetails _returnFlight;
 
+        public Dictionary<string, Airport> Airports { get; private set; }
         public string DepartureAircraftName { get; set; }
         public string DepartureFlightNumber { get; set; }
         public string ReturnAircraftName { get; set; }
@@ -42,31 +43,15 @@ namespace CarbonOffset.Pages
         public List<CarbonProjectDetails> CarbonProjects { get; set; }
 
         // Setting Http Client factory
-        public CarbonModel(IHttpClientFactory clientFactory, CarbonFlightOffsetService carbonFlightOffsetService)
+        public CarbonModel(ICommonService commonService, IcaoCarbonEmissionApiService icaoCarbonEmissionApiService, ISiaDestinationApiService siaDestinationApiService, CarbonFlightOffsetService carbonFlightOffsetService)
         {
-            if (clientFactory != null)
-            {
-                _clientFactory = clientFactory;
-            }
-            if (carbonFlightOffsetService != null)
-            {
-                _carbonFlightOffsetService = carbonFlightOffsetService;
-            }
-            if (Globals.Airports.Count == 0)
-            {
-                Globals.LoadAirports("./Data/airports.json");
-            }
-            if (Globals.GetAircraftCount() == 0)
-            {
-                Globals.LoadAircrafts("./Data/aircrafts.json");
-            }
-            if (Globals.IataToIcaoAirportCodes.Count == 0)
-            {
-                Globals.LoadAirportCode("./Data/IATA_ICAO.csv");
-            }
+            _commonService = commonService;
+            _icaoCarbonEmissionApiService = icaoCarbonEmissionApiService;
+            _siaDestinationApiService = siaDestinationApiService;
+            _carbonFlightOffsetService = carbonFlightOffsetService;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             if (String.IsNullOrEmpty(DepartureAircraftName) ||
                 String.IsNullOrEmpty(DepartureFlightNumber) ||
@@ -76,6 +61,8 @@ namespace CarbonOffset.Pages
                 return RedirectToPage("/Index");
             }
 
+            Airports = await _siaDestinationApiService.GetAirports();
+
             _departureFlight = new FlightDetails()
             {
                 AircraftName = DepartureAircraftName,
@@ -84,9 +71,9 @@ namespace CarbonOffset.Pages
                 ClassType = ClassType,
                 CurrentCapacity = Passengers,
                 IataOriginAirportCode = OriginAirport,
-                IcaoOriginAirportCode = Globals.IataToIcaoAirportCodes[OriginAirport],
+                IcaoOriginAirportCode = _commonService.GetIataIcaoAirportCodes()[OriginAirport],
                 IataDestinationAirportCode = DestinationAirport,
-                IcaoDestinationAirportCode = Globals.IataToIcaoAirportCodes[DestinationAirport]
+                IcaoDestinationAirportCode = _commonService.GetIataIcaoAirportCodes()[DestinationAirport]
             };
             PopulateCarbonEmissionDetails(ref _departureFlight);
             ViewData["CurrentCarbonEmission"] = _departureFlight.CurrentCarbonEmission;
@@ -105,9 +92,9 @@ namespace CarbonOffset.Pages
                     ClassType = ClassType,
                     CurrentCapacity = Passengers,
                     IataOriginAirportCode = DestinationAirport,
-                    IcaoOriginAirportCode = Globals.IataToIcaoAirportCodes[DestinationAirport],
+                    IcaoOriginAirportCode = _commonService.GetIataIcaoAirportCodes()[DestinationAirport],
                     IataDestinationAirportCode = OriginAirport,
-                    IcaoDestinationAirportCode = Globals.IataToIcaoAirportCodes[OriginAirport]
+                    IcaoDestinationAirportCode = _commonService.GetIataIcaoAirportCodes()[OriginAirport]
                 };
 
                 // Get carbon emission for round trip
@@ -119,7 +106,7 @@ namespace CarbonOffset.Pages
                 ViewData["returnFlightDetailsJson"] = JsonConvert.SerializeObject(_returnFlight);
             }
 
-            GetCarbonProjects("./Data/marketplace.json", "SGD");
+            GetCarbonProjects("SGD");
             return Page();
         }
 
@@ -143,14 +130,15 @@ namespace CarbonOffset.Pages
 
         private void PopulateCarbonEmissionDetails(ref FlightDetails flightDetails)
         {
-            List<FlightDetails> flightCarbonEmissionDetails = GetCarbonEmissions(flightDetails);
+            /*List<FlightDetails> flightCarbonEmissionDetails = _icaoCarbonEmissionApiService.GetCarbonEmissions(flightDetails);
             if (flightCarbonEmissionDetails == null)
             {
                 flightCarbonEmissionDetails = GetCarbonEmissions("./Data/carbonemissions.json");
-            }
+            }*/
+            List<FlightDetails> flightCarbonEmissionDetails = GetCarbonEmissions("./Data/carbonemissions.json");
             foreach (FlightDetails flightCarbonEmission in flightCarbonEmissionDetails)
             {
-                Aircraft aircraft = Globals.FindAircraft(flightDetails.AircraftName);
+                Aircraft aircraft = _commonService.GetAircrafts()[flightDetails.AircraftName];
                 // Get total carbon emission for aircraft base on the number of seats in each class type
                 if (aircraft.F != 0)
                 {
@@ -180,25 +168,6 @@ namespace CarbonOffset.Pages
             }
         }
 
-        // Carbon emission calculator methodology from https://www.icao.int/environmental-protection/CarbonOffset/Documents/Methodology%20ICAO%20Carbon%20Calculator_v10-2017.pdf
-        private List<FlightDetails> GetCarbonEmissions(FlightDetails flightDetails)
-        {
-            List<FlightDetails> results = new List<FlightDetails>();
-
-            using (HttpClient httpClient = _clientFactory.CreateClient("icaoCarbonEmissions"))
-            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "?api_key=" + _icaoApiKey
-                + "&from=" + flightDetails.IcaoOriginAirportCode
-                + "&to=" + flightDetails.IcaoDestinationAirportCode
-                + "&travelclass=" + ((char)flightDetails.ClassType).ToString()
-                + "&indicator=" + ((flightDetails.IsMetric) ? "m" : "s")))
-            {
-                string carbonEmissionJsonResult = httpClient.GetStringAsync(request.RequestUri).Result;
-                results = JsonConvert.DeserializeObject<List<FlightDetails>>(carbonEmissionJsonResult);
-            }
-
-            return results;
-        }
-
         private List<FlightDetails> GetCarbonEmissions(string filePath)
         {
             List<FlightDetails> results = new List<FlightDetails>();
@@ -211,50 +180,24 @@ namespace CarbonOffset.Pages
             return results;
         }
 
-        private void GetCarbonProjects(string filePath, string baseCurrency)
+        private void GetCarbonProjects(string baseCurrency)
         {
-            Dictionary<string, double> exchangeRates = GetCurrencyExchangeRates(baseCurrency);
-
-            using (StreamReader reader = new StreamReader(filePath))
-            {  
-                JObject jsonFile = JObject.Parse(reader.ReadToEnd());
-                IList<JToken> jsonProjects = jsonFile["projects"].Children().ToList();
-                CarbonProjects = new List<CarbonProjectDetails>(jsonProjects.Count);
-                foreach (JToken project in jsonProjects)
-                {;
-                    CarbonProjectDetails carbonProject = project.ToObject<CarbonProjectDetails>();
-                    // Convert Project currency to base currency
-                    if (carbonProject.Currency != baseCurrency)
-                    {
-                        carbonProject.CarbonPrice = exchangeRates[carbonProject.Currency] / carbonProject.CarbonPrice;
-                        carbonProject.Currency = baseCurrency;
-                    }
-                    else
-                    {
-                        carbonProject.CarbonPrice = carbonProject.CarbonPrice;
-                    }
-
-                    CarbonProjects.Add(carbonProject);
+            Dictionary<string, double> exchangeRates = _commonService.GetCurrencyExchangeRates(baseCurrency);
+            CarbonProjects = _commonService.GetCarbonProjects();
+            foreach (CarbonProjectDetails carbonProject in CarbonProjects)
+            {
+                // Convert Project currency to base currency
+                if (carbonProject.Currency != baseCurrency)
+                {
+                    carbonProject.CarbonPrice = exchangeRates[carbonProject.Currency] / carbonProject.CarbonPrice;
+                    carbonProject.Currency = baseCurrency;
+                }
+                else
+                {
+                    carbonProject.CarbonPrice = carbonProject.CarbonPrice;
                 }
             }
-        }
-
-        private Dictionary<string, double> GetCurrencyExchangeRates(string currencyBase)
-        {
-            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "")
-            {
-                Content = new FormUrlEncodedContent(new[]
-                {
-                    new KeyValuePair<string, string>("base", currencyBase)
-                })
-            })
-            using (HttpClient httpClient = _clientFactory.CreateClient("exchangeRate"))
-            {
-                string currencyExchangeRateJson = httpClient.GetStringAsync(request.RequestUri).Result;
-                JObject exchangeRatesJson = JObject.Parse(currencyExchangeRateJson);
-                return exchangeRatesJson["rates"].Children<JProperty>().ToDictionary( k => k.Name, v => v.Value.ToObject<double>() );
-            }
-        }
+        }        
 
         private FlightOffset ConfirmFlightOffset(FlightOffset confirmFlightOffset)
         {
@@ -266,8 +209,7 @@ namespace CarbonOffset.Pages
             }
             else
             {
-                Aircraft aircraft = Globals.FindAircraft(confirmFlightOffset.FlightDetails.AircraftName);
-                if ((aircraft.Total - flightOffset.FlightDetails.CurrentCapacity - confirmFlightOffset.FlightDetails.CurrentCapacity) > 0)
+                if ((_commonService.GetAircrafts()[confirmFlightOffset.FlightDetails.AircraftName].Total - flightOffset.FlightDetails.CurrentCapacity - confirmFlightOffset.FlightDetails.CurrentCapacity) > 0)
                 {
                     flightOffset.FlightDetails.CurrentCapacity += confirmFlightOffset.FlightDetails.CurrentCapacity;
                     flightOffset.FlightDetails.CurrentCarbonEmission += confirmFlightOffset.FlightDetails.CurrentCarbonEmission;

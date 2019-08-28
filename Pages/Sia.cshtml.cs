@@ -12,31 +12,25 @@ namespace CarbonOffset.Pages
 {
     public class SiaModel : PageModel
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly ISiaDestinationApiService _siaDestinationApiService;
         private readonly CarbonFlightOffsetService _carbonFlightOffsetService;
 
         [BindProperty(SupportsGet=true)]
         public String Id { get; set; }
         public List<FlightOffset> Flights { get; set; } = new List<FlightOffset>();
+        public Dictionary<string, Airport> Airports { get; private set; }
 
         // Setting Http Client factory and MongoDB Service
-        public SiaModel(IHttpClientFactory clientFactory, CarbonFlightOffsetService carbonFlightOffsetService)
+        public SiaModel(ISiaDestinationApiService siaDestinationApiService, CarbonFlightOffsetService carbonFlightOffsetService)
         {
-            if (clientFactory != null)
-            {
-                _clientFactory = clientFactory;
-            }
-            if (carbonFlightOffsetService != null)
-            {
-                _carbonFlightOffsetService = carbonFlightOffsetService;
-            }
-            if (Globals.Airports.Count == 0)
-            {
-                Globals.LoadAirports("./Data/airports.json");
-            }
+            _siaDestinationApiService = siaDestinationApiService;
+            _carbonFlightOffsetService = carbonFlightOffsetService;
         }
-        public void OnGet()
+
+        public async Task<IActionResult> OnGetAsync()
         {
+            Airports = await _siaDestinationApiService.GetAirports();
+
             if (String.IsNullOrEmpty(Id))
             {
                 Flights = _carbonFlightOffsetService.Get();
@@ -45,6 +39,8 @@ namespace CarbonOffset.Pages
             {
                 Flights.Add(_carbonFlightOffsetService.Get(Id));
             }
+
+            return Page();
         }
     }
 }

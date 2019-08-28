@@ -11,13 +11,13 @@
             <div class="jumbotron">
                 <h1 class="display-4">@offsetFlight.FlightDetails.FlightNumber (@offsetFlight.FlightDetails.AircraftName)</h1>
                 <p class="lead">
-                    @(Models.Globals.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].CityName
-                    + ", " + Models.Globals.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].CountryName
-                    + " (" + Models.Globals.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].Code + ")")
+                    @(Model.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].CityName
+                    + ", " + Model.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].CountryName
+                    + " (" + Model.Airports[offsetFlight.FlightDetails.IataOriginAirportCode].Code + ")")
                     <i class="fa fa-long-arrow-right"></i>
-                    @(Models.Globals.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].CityName
-                    + ", " + Models.Globals.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].CountryName
-                    + " (" + Models.Globals.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].Code + ")")
+                    @(Model.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].CityName
+                    + ", " + Model.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].CountryName
+                    + " (" + Model.Airports[offsetFlight.FlightDetails.IataDestinationAirportCode].Code + ")")
                 </p>
                 <hr class="my-4">
                 <p><b>Flight Date:</b> @offsetFlight.FlightDetails.Date</p>
